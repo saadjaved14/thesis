@@ -1,8 +1,0 @@
-classifierPath: evaluation_setup_emotion_5\svm_model.pickle
-classifierConfigPath: evaluation_setup_emotion_5\config.yml
-evaluationSetupPath: evaluation_setup_emotion_5
-evaluationFolds: 10
-sourceFilesPath: Data\sorted_set
-testSetupPath: test_setup_emotion_5
-landmarksPath: Data\landmarks
-emotionList: [disgust, fear, happiness, neutral, sadness, surprise]

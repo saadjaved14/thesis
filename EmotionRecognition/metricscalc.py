@@ -1,8 +1,9 @@
-from sklearn.metrics import confusion_matrix
-import numpy as np
-import matplotlib.pyplot as plt
 import itertools
 from os import path
+
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.metrics import confusion_matrix
 
 '''def compute_metrics_cm(self, pma_true, pf_result, pv_label, pv_multilabel):
     """
@@ -87,9 +88,9 @@ def plot_confusion_matrix(cm, classes,
     thresh = cm.max() / 2.
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
         if normalize:
-            value = '{:.2f}'.format(cm[i,j])
+            value = '{:.2f}'.format(cm[i, j])
         else:
-            value = '{0}'.format(cm[i,j])
+            value = '{0}'.format(cm[i, j])
         plt.text(j, i, value,
                  horizontalalignment="center",
                  color="white" if cm[i, j] > thresh else "black")
@@ -99,12 +100,10 @@ def plot_confusion_matrix(cm, classes,
     plt.xlabel('Predicted label')
 
 
-
 def create_confusion_matrix(pv_path, pa_y_true, pa_y_pred, pa_labels, fold=''):
     nparr_true = np.array(pa_y_true)
     nparr_pred = np.array(pa_y_pred)
     nparr_labels = np.array(pa_labels)
-
 
     # Compute confusion matrix
     cnf_matrix = confusion_matrix(nparr_true, nparr_pred)
@@ -124,5 +123,4 @@ def create_confusion_matrix(pv_path, pa_y_true, pa_y_pred, pa_labels, fold=''):
     current_path = path.join(pv_path, "cnf_mtx_nml_fold_{0}.png".format(fold))
     plt.savefig(current_path)
     plt.clf()
-    #plt.show()
-
+    # plt.show()

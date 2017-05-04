@@ -1,8 +1,8 @@
-import helper
-import evaluation_setup_creator
-import create_test_setup
-import train
 import compute_metrics_calculation
+import create_test_setup
+import evaluation_setup_creator
+import helper
+import train
 
 
 def run_all():

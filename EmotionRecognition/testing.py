@@ -1,9 +1,11 @@
-import predictor
-import pandas as pd
-from os import path
 import glob
+from os import path
+
 import cv2
+import pandas as pd
+
 import metricscalc as mc
+import predictor
 
 
 def test(pv_path):
@@ -17,17 +19,17 @@ def test(pv_path):
 
     # Predict labels for all participants
     for index, item in df_participants.iterrows():
-            print "File name: {0}".format(item['filename'])
-            print "True label: {0}".format(item['labels'])
-            img = cv2.imread(item['filename'])
-            result_status, pred_result = predictor.predict_image(img)
-            if result_status is False:
-                print "No face detected"
-                pass
-            else:
-                print "Predicted label: {0}".format(pred_result[0])
-                true_labels.append(item['labels'])
-                predicted_labels.append(pred_result[0])
+        print "File name: {0}".format(item['filename'])
+        print "True label: {0}".format(item['labels'])
+        img = cv2.imread(item['filename'])
+        result_status, pred_result = predictor.predict_image(img)
+        if result_status is False:
+            print "No face detected"
+            pass
+        else:
+            print "Predicted label: {0}".format(pred_result[0])
+            true_labels.append(item['labels'])
+            predicted_labels.append(pred_result[0])
     df_results = pd.DataFrame(true_labels, columns=['true'])
     df_results['predicted'] = predicted_labels
     df_results.to_csv(path.join(pv_path, "label_results.csv"), index=False)

@@ -1,22 +1,24 @@
 import collections
 import glob
 from os import path
+
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.metrics import *
-import landmarkDetector
-import predictor
-import helper
-import metricscalc as mc
 
+import helper
+import landmarkDetector
+import metricscalc as mc
+import predictor
 
 gl_emotions = []
 gd_setup = {}
 gd_config = {}
 
+
 def plot_curve(pv_path, pd_result, pl_labels, pv_title, pv_fold=-1):
     for fold in xrange(len(pd_result)):
-        if pv_fold >= 0 and fold==pv_fold:
+        if pv_fold >= 0 and fold == pv_fold:
             for emotion in gl_emotions:
                 plt.plot(pd_result[fold][emotion][pl_labels[0]], pd_result[fold][emotion][pl_labels[1]], label=emotion)
                 plt.title('{0} Fold {1}'.format(pv_title, fold))
@@ -37,7 +39,6 @@ def compute_confusion_matrix(pdf_groundtruth, pd_predicted, pv_path, pv_fold=-1)
                     y_pred.append(pd_predicted[str(fold)][participant['filename']])
                     y_gt.append(participant['labels'])
             mc.create_confusion_matrix(pv_path, y_gt, y_pred, gl_emotions, str(fold))
-
 
 
 def compute_precision_recall_curve(pl_participant, pd_predicted, pd_groundtruth):
@@ -104,12 +105,13 @@ def create_ground_truth_dict(pdf_participants):
 
 
 def run_main_loop(pv_testpath):
-    ll_fold_names = glob.glob(path.join(pv_testpath,'*'))
-    #ll_fold_names = ['test_setup2']
+    ll_fold_names = glob.glob(path.join(pv_testpath, '*'))
+    # ll_fold_names = ['test_setup2']
     lv_fold = 0
     for folder_name in ll_fold_names:
         df_participants = get_participants(folder_name)
-        d_participants_landmarks = landmarkDetector.get_landmarks_dict(folder_name, df_participants['filename'])
+        d_participants_landmarks = landmarkDetector.get_landmarks_dict(gd_setup['landmarksPath'],
+                                                                       df_participants['filename'])
         d_pred_prob, d_pred_labels = get_prediction_probabilities(df_participants['filename'], d_participants_landmarks)
         d_ground_truth = create_ground_truth_dict(df_participants)
         compute_confusion_matrix(df_participants, d_pred_labels, folder_name, lv_fold)
@@ -117,12 +119,12 @@ def run_main_loop(pv_testpath):
         d_prc = compute_precision_recall_curve(df_participants['filename'], d_pred_prob, d_ground_truth)
         plot_curve(folder_name, d_roc, ['fpr', 'tpr'], 'roc', lv_fold)
         plot_curve(folder_name, d_prc, ['recall', 'precision'], 'prc', lv_fold)
-        lv_fold+=1
+        lv_fold += 1
 
 
 def main():
     global gl_emotions
-    global gd_emotions
+    global gd_setup
     global gd_config
     gd_setup, gd_config = helper.load_setup()
     gl_emotions = gd_config['emotions']

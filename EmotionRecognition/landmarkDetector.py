@@ -1,16 +1,12 @@
 # Script to detect landmarks using Dlib face detecor
+import math
+from os import path
+
 import cv2
 import dlib
 import numpy as np
-import math
-import glob
+
 import filemanager as fm
-from os import path
-import helper
-
-
-# Load Yaml Setup File
-gd_setup, __ = helper.load_setup()
 
 # Setup
 detector = dlib.get_frontal_face_detector()
@@ -65,13 +61,11 @@ def get_landmarks(image):
 
 
 def get_landmarks_dict(pv_path, pl_participants):
-    ll_landmarks_file = glob.glob(path.join(gd_setup['landmarksPath'], "*landmark*.pickle"))
-    if len(ll_landmarks_file) == 0:
+    participants_landmarks_filename = pv_path
+    if not path.isfile(participants_landmarks_filename):
         d_participants_landmarks = {}
-        participants_landmarks_filename = path.join(pv_path, "participants_landmark.pickle")
     else:
-        d_participants_landmarks = fm.pickle_load_file(ll_landmarks_file[0])
-        participants_landmarks_filename = ll_landmarks_file[0]
+        d_participants_landmarks = fm.pickle_load_file(participants_landmarks_filename)
 
     number_of_participants = len(d_participants_landmarks)
 

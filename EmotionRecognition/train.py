@@ -1,20 +1,25 @@
-import cv2
-import glob
-import numpy as np
-import landmarkDetector
 import copy
-import filemanager as fm
-from sklearn.svm import SVC
+import glob
 from os import path
-import pandas as pd
-import helper
 
+import numpy as np
+import pandas as pd
+from sklearn.svm import SVC
+
+import filemanager as fm
+import helper
+import landmarkDetector
 
 json_dict = {}
 gd_setup = {}
 
 
-def get_landmarks_dict(pv_basepath):
+def train(pv_basepath):
+    # Read the names of all the _train and _test csv files
+    training_filenames = glob.glob(path.join(pv_basepath, "*train.csv"))
+    testing_filenames = glob.glob(path.join(pv_basepath, "*test.csv"))
+
+    # Get file names of all the images in data set
     # Find all participants list
     ll_filenames = glob.glob(path.join(pv_basepath, "*all_participants.csv"))
     if len(ll_filenames) == 0:
@@ -24,50 +29,8 @@ def get_landmarks_dict(pv_basepath):
     # Read participants list from CSV
     df_participants_list = pd.read_csv(ll_filenames[0])
 
-    # Find dictionary pickle file and load it
-    ll_landmarks_file = glob.glob(path.join(gd_setup['landmarksPath'], "*landmark.pickle"))
-    if len(ll_landmarks_file) == 0:
-        d_participants_landmarks = {}
-        participants_landmarks_filename = path.join(pv_basepath, "participants_landmark.pickle")
-    else:
-        d_participants_landmarks = fm.pickle_load_file(ll_landmarks_file[0])
-        participants_landmarks_filename = ll_landmarks_file[0]
-
-    number_of_participants = len(d_participants_landmarks)
-
-    # Compare loaded dictionary with participants list
-    # Update missing participants landmarks
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-    for index, item in df_participants_list.iterrows():
-        # Check if landmarks are already in dictionary
-        if str(item['filename']) in d_participants_landmarks:
-            print ("Landmarks available: {0}".format(str(item['filename'])))
-            pass
-        else:
-            image = cv2.imread(item["filename"])            # open image
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # convert to grayscale
-            clahe_image = clahe.apply(gray)
-            landmarks_vectorised = landmarkDetector.get_landmarks(clahe_image)
-            if landmarks_vectorised == "error":
-                print ("Landmarks skipped: {0}".format(str(item['filename'])))
-                pass
-            else:
-                print ("Landmarks updated: {0}".format(str(item['filename'])))
-                d_participants_landmarks.update({str(item["filename"]): landmarks_vectorised})
-
-    # Store updated landmarks pickle file
-    fm.pickle_save_file(participants_landmarks_filename, d_participants_landmarks)
-    print ("New participants added: {0}".format(len(d_participants_landmarks) - number_of_participants))
-    return d_participants_landmarks
-
-
-def train(pv_basepath):
-    # Read the names of all the _train and _test csv files
-    training_filenames = glob.glob(path.join(pv_basepath, "*train.csv"))
-    testing_filenames = glob.glob(path.join(pv_basepath, "*test.csv"))
-
     # Get landmarks dictionary
-    d_landmarks = get_landmarks_dict(pv_basepath)
+    d_landmarks = landmarkDetector.get_landmarks_dict(gd_setup['landmarksPath'], df_participants_list['filename'])
 
     # initialize model as dictionary
     model = {}

@@ -1,6 +1,7 @@
 import collections
-import filemanager as fm
 import os
+
+import filemanager as fm
 
 
 def nested_dict():

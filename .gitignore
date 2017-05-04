@@ -1,3 +1,4 @@
-EvaluationTestFolder/
-*.png
-*.jpg
+.idea/
+Data/sorted_set/
+Data/sorted_set_testing/
+EmotionRecognition/Evaluation/
