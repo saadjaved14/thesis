@@ -59,8 +59,9 @@ def create_evaluation_setup(pv_basepath, pv_sourcepath, pv_fold_number, limit_to
 
 def split_training_testing_files(pv_sourcepath, emotion,
                                  max_files=0):  # Define function to get file list, randomly shuffle it and split 80/20
-    files = glob.glob(path.join(pv_sourcepath, "{0}\\*".format(emotion)))
-    random.shuffle(files)
+    # files = glob.glob(path.join(pv_sourcepath, "{0}\\*".format(emotion)))
+    files = get_filenames(pv_sourcepath, emotion)
+    random.shuffle(files['filename'])
     if max_files > 0:
         training = files[:int(max_files * 0.8)]  # get first 80% of file list
         prediction = files[-int(max_files * 0.2):]  # get last 20% of file list

@@ -74,10 +74,11 @@ def get_landmarks_dict(pv_path, pl_participants):
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
     for participant in pl_participants:
         # Check if landmarks are already in dictionary
-        if d_participants_landmarks.has_key(participant):
+        if participant in d_participants_landmarks:
             print ("Landmarks available: {0}".format(participant))
             pass
         else:
+            print participant
             image = cv2.imread(participant)  # open image
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # convert to grayscale
             clahe_image = clahe.apply(gray)

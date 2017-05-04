@@ -5,4 +5,4 @@ evaluationFolds: 10
 sourceFilesPath: ..\Data\sorted_set
 testSetupPath: Evaluation\test_setup
 landmarksPath: ..\Data\landmarks\kanadeLandmarks.pickle
-emotionList: [disgust, fear, happiness, neutral, sadness, surprise]
+emotionList: [anger, disgust, happiness, neutral, surprise]
