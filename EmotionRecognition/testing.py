@@ -1,9 +1,7 @@
 import glob
 from os import path
-
 import cv2
 import pandas as pd
-
 import metricscalc as mc
 import predictor
 

@@ -97,7 +97,7 @@ def main():
     # create_participants_list(pv_basepath="test_setup2", pv_sourcepath="Data\\sorted_set_testing2")
     for i in xrange(v_folds):
         create_evaluation_setup(pv_basepath=v_basepath, pv_sourcepath=v_sourcepath,
-                                pv_fold_number=i, limit_to_min=True)
+                                pv_fold_number=i, limit_to_min=False)
 
     # Update yaml dict
     yaml_dict['basepath'] = v_basepath

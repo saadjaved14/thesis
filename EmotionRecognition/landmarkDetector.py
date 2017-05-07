@@ -18,13 +18,19 @@ predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 def get_landmarks(image):
     detections = detector(image, 1)
     landmarks = []
+    original_landmarks = []
     for k, d in enumerate(detections):  # For all detected face instances individually
         shape = predictor(image, d)  # Draw Facial Landmarks with the predictor class
         xlist = []
         ylist = []
+        curr_original_landmarks = []
         for i in range(1, 68):  # Store X and Y coordinates in two lists
-            xlist.append(float(shape.part(i).x))
-            ylist.append(float(shape.part(i).y))
+            x_corr = float(shape.part(i).x)
+            y_corr = float(shape.part(i).y)
+            xlist.append(x_corr)
+            ylist.append(y_corr)
+            curr_original_landmarks.append((int(x_corr), int(y_corr)))
+
 
         xmean = np.mean(xlist)  # Get the mean of both axes to determine centre of gravity
         ymean = np.mean(ylist)
@@ -54,10 +60,11 @@ def get_landmarks(image):
             landmarks_vectorised.append(anglerelative)
 
         landmarks.append(landmarks_vectorised)
+        original_landmarks.append(curr_original_landmarks)
 
     if len(detections) < 1:
         landmarks = "error"
-    return landmarks
+    return landmarks, original_landmarks
 
 
 def get_landmarks_dict(pv_path, pl_participants):
@@ -82,7 +89,7 @@ def get_landmarks_dict(pv_path, pl_participants):
             image = cv2.imread(participant)  # open image
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # convert to grayscale
             clahe_image = clahe.apply(gray)
-            landmarks_vectorised = get_landmarks(clahe_image)
+            landmarks_vectorised, __ = get_landmarks(clahe_image)
             if landmarks_vectorised == "error":
                 print ("Landmarks skipped: {0}".format(participant))
                 pass

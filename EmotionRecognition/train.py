@@ -5,6 +5,7 @@ from os import path
 import numpy as np
 import pandas as pd
 from sklearn.svm import SVC
+from sklearn.svm import LinearSVC
 
 import filemanager as fm
 import helper
@@ -48,6 +49,7 @@ def train(pv_basepath):
     # Setup Support Vector Machine
     # Set the classifier as a support vector machines with polynomial kernel
     clf = SVC(kernel='linear', probability=True, tol=1e-3)  # ,verbose = True)
+    # clf = LinearSVC()  # ,verbose = True)
 
     # Iterate through each _train file and create a model
     for filename in training_filenames:

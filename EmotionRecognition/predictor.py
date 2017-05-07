@@ -7,11 +7,12 @@ import filemanager as fm
 import helper
 import landmarkDetector as ld
 
-d_setup, __ = helper.load_setup()
+d_setup, d_config = helper.load_setup()
 # clf_dict = fm.pickle_load_file(d_setup['classifierPath'])
 clf_dict = {}
 clf_dict_loaded = False
 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+
 
 
 def load_clf_dict():
@@ -35,18 +36,23 @@ def predict_image(frame):
     if clf_dict_loaded is False:
         load_clf_dict()
     image = preprocessFrame(frame)
-    landmark_vector = ld.get_landmarks(image)
+    landmark_vector, original_landmarks = ld.get_landmarks(image)
     if landmark_vector == "error":
-        return False, ["0"]
+        return False, ["0"], 'NA', 'NA', 'NA'
     prediction_data = np.array(landmark_vector)
     result = []
     for i, clf in clf_dict.iteritems():
         # print "Model ",i, ": ", clf.predict(prediction_data)
         # ll_pred_prob = clf.predict_proba(prediction_data)
         ll_pred = clf.predict(prediction_data)
+        llol_pred = clf.predict_proba(prediction_data)
         result.append(ll_pred)
     mode_result = stats.mode(result)
-    return True, mode_result[0][0]
+    mode_label = []
+    for m_result in mode_result[0][0]:
+        mode_label.append(d_config['emotions'][m_result])
+    # print mode_label
+    return True, mode_result[0][0], mode_label, llol_pred, original_landmarks
 
 
 def predict_features(pl_features):
