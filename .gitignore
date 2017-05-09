@@ -2,3 +2,9 @@
 Data/sorted_set/
 Data/sorted_set_testing/
 EmotionRecognition/Evaluation/
+*.pyc
+*.7z
+Data/IMFDB_sorted/
+Data/KDEF_sorted/
+Data/KDEF_sorted_plus/
+Data/KDEF_sorted_plus_ex/

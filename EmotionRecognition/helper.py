@@ -1,6 +1,5 @@
 import collections
 import os
-
 import filemanager as fm
 
 

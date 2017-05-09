@@ -1,8 +1,8 @@
-classifierPath: Evaluation\kdef_plus_set\svm_linear_no_disgust\svm_model.pickle
-classifierConfigPath: Evaluation\kdef_plus_set\svm_linear_no_disgust\config.yml
-evaluationSetupPath: Evaluation\kdef_plus_set\svm_linear_no_disgust
+classifierPath: Evaluation\kdef_plus_ex_set\svm_linear\svm_model.pickle
+classifierConfigPath: Evaluation\kdef_plus_ex_set\svm_linear\config.yml
+evaluationSetupPath: Evaluation\kdef_plus_ex_set\svm_linear
 evaluationFolds: 10
-sourceFilesPath: ..\Data\KDEF_sorted_plus
-testSetupPath: Evaluation\kdef_plus_set\test_setup_no_disgust
-landmarksPath: ..\Data\landmarks\kdefplusLandmarks.pickle
-emotionList: [anger, fear, happiness, neutral, sadness, surprise]
+sourceFilesPath: ..\Data\KDEF_sorted_plus_ex
+testSetupPath: Evaluation\kdef_plus_ex_set\test_setup
+landmarksPath: ..\Data\landmarks\kdefplusexLandmarks.pickle
+emotionList: [anger, disgust, fear, happiness, neutral, sadness, surprise]
